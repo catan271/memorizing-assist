@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import { useQuiz } from "./hooks/useQuiz";
 import { QuizLayout } from "./components/QuizLayout";
 import { ChoiceMode } from "./components/ChoiceMode";
@@ -9,7 +9,7 @@ function App() {
   const quiz = useQuiz();
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <QuizLayout quiz={quiz}>
         <Routes>
           <Route path="/" element={<Navigate to="/choices" replace />} />
@@ -36,7 +36,7 @@ function App() {
           />
         </Routes>
       </QuizLayout>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

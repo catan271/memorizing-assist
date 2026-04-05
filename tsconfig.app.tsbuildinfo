@@ -1,1 +1,0 @@
-{"root":["./src/app.tsx","./src/data.ts","./src/index.tsx","./src/types.ts","./src/components/choicemode.tsx","./src/components/quizlayout.tsx","./src/components/textmode.tsx","./src/hooks/usequiz.ts","./src/lib/quiz.ts"],"version":"5.9.3"}
