@@ -5,9 +5,10 @@ type TextModeProps = {
   question: Question;
   selectedAnswer: string | null;
   onSubmit: (value: string) => void;
+  onNext: () => void;
 };
 
-export function TextMode({ question, selectedAnswer, onSubmit }: TextModeProps) {
+export function TextMode({ question, selectedAnswer, onSubmit, onNext }: TextModeProps) {
   const [draft, setDraft] = useState("");
 
   useEffect(() => {
@@ -45,6 +46,11 @@ export function TextMode({ question, selectedAnswer, onSubmit }: TextModeProps) 
       <button className="submit-button" type="submit" disabled={isLocked || !draft.trim()}>
         Kiểm tra
       </button>
+      {isLocked ? (
+        <button className="next-button" type="button" onClick={onNext}>
+          Câu tiếp theo
+        </button>
+      ) : null}
       <p className="text-mode-note">
         So khớp bỏ qua khác biệt về hoa thường, dấu câu và khoảng trắng thừa.
       </p>

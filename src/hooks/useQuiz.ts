@@ -11,7 +11,9 @@ import {
   STORAGE_KEY,
 } from "../lib/quiz";
 
-export function useQuiz() {
+type QuizMode = "choices" | "text";
+
+export function useQuiz(mode: QuizMode) {
   const [stats, setStats] = useState<Record<string, MappingStat>>(() => readStoredStats());
   const [question, setQuestion] = useState<Question>(() =>
     weightedPick(allQuestions, (item) => statWeight(readStoredStats()[item.key])),
@@ -28,9 +30,17 @@ export function useQuiz() {
     return () => {
       if (timeoutRef.current) {
         window.clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (mode === "text" && timeoutRef.current) {
+      window.clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+  }, [mode]);
 
   const totalSeen = useMemo(
     () => Object.values(stats).reduce((sum, item) => sum + item.seen, 0),
@@ -64,7 +74,10 @@ export function useQuiz() {
     if (timeoutRef.current) {
       window.clearTimeout(timeoutRef.current);
     }
-    timeoutRef.current = window.setTimeout(() => moveNext(nextStats), 850);
+    timeoutRef.current = window.setTimeout(() => {
+      timeoutRef.current = null;
+      moveNext(nextStats);
+    }, 850);
   };
 
   const registerAnswer = (isCorrect: boolean, submittedAnswer: string) => {
@@ -89,7 +102,9 @@ export function useQuiz() {
         [question.key]: nextStat,
       };
 
-      queueNext(nextStats);
+      if (mode === "choices") {
+        queueNext(nextStats);
+      }
       return nextStats;
     });
   };
@@ -107,9 +122,14 @@ export function useQuiz() {
     registerAnswer(isCorrect, value);
   };
 
+  const nextQuestion = () => {
+    moveNext(stats);
+  };
+
   const resetProgress = () => {
     if (timeoutRef.current) {
       window.clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
     }
     setStats({});
     setSelectedAnswer(null);
@@ -129,6 +149,7 @@ export function useQuiz() {
     selectedAnswer,
     statWeight: statWeight(stats[question.key] ?? defaultStats()),
     submitTextAnswer,
+    nextQuestion,
     totalSeen,
     totalWrong,
   };

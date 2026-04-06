@@ -215,6 +215,15 @@ h2 {
   font-weight: 700;
 }
 
+.next-button {
+  border: 1px solid rgba(156, 108, 44, 0.24);
+  border-radius: 18px;
+  padding: 14px 16px;
+  background: #fff7ed;
+  color: #6d451c;
+  font-weight: 700;
+}
+
 .submit-button:disabled,
 .text-answer-input:disabled {
   opacity: 0.7;
